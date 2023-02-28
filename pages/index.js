@@ -28,7 +28,7 @@ export default function Home() {
         <div>
         {session && session.user ? (
           <h2>Eth price {data.data.price}   <button onClick={() => signOut()}>Sign out</button></h2>
-        ): (<h2>Please sigin <button onClick={() => signIn()}>Sign in</button></h2>)
+        ): (<h2>Please sigin   <button onClick={() => signIn()}>Sign in</button></h2>)
 }        </div>
       </main>
     </>
