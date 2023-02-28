@@ -2,17 +2,19 @@ import Head from 'next/head'
 import {Inter} from 'next/font/google'
 import styles from '@/styles/Home.module.css'
 import useSWR from 'swr'
+import { useSession, signIn, signOut } from "next-auth/react"
 
 const inter = Inter({subsets: ['latin']})
 
 const fetcher = (...args) => fetch(...args).then((res) => res.json())
 
 export default function Home() {
+  const {data: session} = useSession()
 
   const {data, error, isLoading} = useSWR('https://coding-challenge-be.vercel.app/api/index', fetcher)
 
-  if (error) return <div>failed to load</div>
-  if (isLoading) return <div>loading...</div>
+  if (error) return <main className={styles.main}><h1>failed to load</h1></main>
+  if (isLoading) return <main className={styles.main}><div>loading...</div></main>
 
   return (
     <>
@@ -24,8 +26,10 @@ export default function Home() {
       </Head>
       <main className={styles.main}>
         <div>
-          <h2>Eth price {data.data.price}</h2>
-        </div>
+        {session && session.user ? (
+          <h2>Eth price {data.data.price}   <button onClick={() => signOut()}>Sign out</button></h2>
+        ): (<h2>Please sigin <button onClick={() => signIn()}>Sign in</button></h2>)
+}        </div>
       </main>
     </>
   )
